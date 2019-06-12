@@ -27,14 +27,26 @@ viewModel.setData({
 //listen data from UI
 viewModel.$on("exportSVG", function () {
     let xml = designerCanvas.canvas.toSVG();
+    // console.log(xml);
+    viewModel.setData({
+        svg: xml
+    });
 });
 
-viewModel.$on("buttonClick", function (event) {
-    console.log("Clicked buttons:", event);
+viewModel.$on("importSVG", function (svg) {
+    designerCanvas.canvas.clear();
+});
+
+viewModel.$on("toFrontClick", function () {
+    designerCanvas.canvas.bringToFront(designerCanvas.canvas.getActiveObject());
+});
+
+viewModel.$on("toBackClick", function () {
+    designerCanvas.canvas.sendToBack(designerCanvas.canvas.getActiveObject());
 });
 
 viewModel.$on("deleteClick", function () {
-    designerCanvas.canvas.getActiveObject().remove();
+    designerCanvas.canvas.remove(designerCanvas.canvas.getActiveObject());
 });
 
 viewModel.$on("addText", function (value) {
@@ -49,6 +61,14 @@ viewModel.$on("addText", function (value) {
     });
     designerCanvas.canvas.add(text);
 });
+
+viewModel.$on("importIMG", function (file) {
+    designerCanvas.addPhoto(
+        file,
+        {left: 50, top: 50}
+    );
+});
+
 //#endregion
 
 //#region work with canvas

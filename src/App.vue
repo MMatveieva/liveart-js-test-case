@@ -4,12 +4,12 @@
             <canvas id="fabric-canvas"></canvas>
             <el-row class="mt-3">
                 <el-tooltip content="To Front">
-                    <el-button @click="handleDelete" plain size="medium" icon="el-icon-upload2"></el-button>
+                    <el-button @click="handleToFront" plain size="medium" icon="el-icon-upload2"></el-button>
                 </el-tooltip>
                 <el-tooltip content="To Back">
-                    <el-button @click="handleClick" plain size="medium" icon="el-icon-download"></el-button>
+                    <el-button @click="handleToBack" plain size="medium" icon="el-icon-download"></el-button>
                 </el-tooltip>
-                <el-button @click="handleClick" type="danger" plain size="medium" icon="el-icon-delete"></el-button>
+                <el-button @click="handleDelete" type="danger" plain size="medium" icon="el-icon-delete"></el-button>
             </el-row>
         </article>
         <el-tabs v-model="activeTab" style="text-align: center">
@@ -35,14 +35,17 @@
                     ID:
                     <span>{{id_gen}}</span>
                 </label>
+                <div class="load-photo">
+                    <b-form-file v-model="file" class="mt-3" plain></b-form-file>
+                </div>
                 <el-row class="mt-3">
                     <el-input placeholder="Image URL" clearable>
-                        <el-button slot="append">Add</el-button>
+                        <el-button slot="append" @click="handleImportIMG">Add</el-button>
                     </el-input>
                 </el-row>
             </el-tab-pane>
             <el-tab-pane label="Import/Export" name="third">
-                <el-input type="textarea" :rows="2" placeholder="SVG"></el-input>
+                <el-input type="textarea" placeholder="SVG" v-model="svg">{{svg}}</el-input>
                 <el-row class="mt-3">
                     <el-button size="medium" type="primary" @click="handleExport">Export SVG</el-button>
                     <el-button size="medium" @click="handleImport">Import SVG</el-button>
@@ -56,7 +59,11 @@
     import Vue from "vue";
     import ElementUI from "element-ui";
     import 'element-ui/lib/theme-chalk/index.css'
+    import BootstrapVue from 'bootstrap-vue'
+    import 'bootstrap/dist/css/bootstrap.css'
+    import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+    Vue.use(BootstrapVue);
     Vue.use(ElementUI);
 
     export default ({
@@ -64,14 +71,16 @@
         data() {
             return {
                 id_gen: 1,
-                id_photo: null,
+                id_photo: -1,
                 activeTab: "first",
                 unusedData: "stub",
+                svg: "",
+                file: "",
                 selectedText: {
                     text: "Default text",
                     font: "Comic Sans",
                     color: "black",
-                    id: null
+                    id: -1
                 }
             };
         },
@@ -96,12 +105,28 @@
                 this.$emit("deleteClick");
             },
 
+            handleToFront() {
+                this.$emit("toFrontClick");
+            },
+
+            handleToBack() {
+                this.$emit("toBackClick");
+            },
+
             handleExport() {
                 this.$emit("exportSVG");
             },
 
+            handleImport() {
+                this.$emit("importSVG", this.svg);
+            },
+
             handleClick(event) {
                 this.$emit("buttonClick", event);
+            },
+
+            handleImportIMG() {
+                this.$emit("importIMG", this.file);
             }
         }
     });
