@@ -27,7 +27,7 @@ viewModel.setData({
 //listen data from UI
 viewModel.$on("exportSVG", function () {
     let xml = designerCanvas.canvas.toSVG();
-    // console.log(xml);
+    console.log(xml);
     viewModel.setData({
         svg: xml
     });
