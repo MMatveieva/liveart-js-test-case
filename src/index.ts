@@ -65,6 +65,17 @@ viewModel.$on("addText", function (value) {
     designerCanvas.canvas.add(text);
 });
 
+viewModel.$on("editText", function (value) {
+    let item = designerCanvas.canvas.getActiveObject();
+    if (!item)
+        return;
+
+    if (item.get('type') == "text") {
+        item.setText(value);
+        designerCanvas.canvas.renderAll();
+    }
+});
+
 viewModel.$on("importIMG", function (url, filter) {
     designerCanvas.addPhoto(
         url,

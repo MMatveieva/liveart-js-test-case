@@ -29,6 +29,11 @@
                     <el-color-picker v-model="selectedText.color" class="mr-3"></el-color-picker>
                     <el-button size="medium" @click="handleAddText" type="primary">Add Text</el-button>
                 </el-row>
+                <el-row class="mt-3" style="display: flex;">
+                    <el-input placeholder="Edit Active Text" v-model="editText" clearable
+                              class="mt-3"></el-input>
+                    <el-button size="medium" @click="handleEditText" type="primary">Edit Text</el-button>
+                </el-row>
             </el-tab-pane>
             <el-tab-pane label="Image" name="second">
                 <label class="label">
@@ -42,6 +47,7 @@
                     <el-input placeholder="Image URL" v-model="imgURL" clearable>
                         <el-button slot="append" @click="handleImportIMG">Add</el-button>
                     </el-input>
+                    <p></p>
                     <el-select v-model="filter" placeholder="Select Filter" class="mr-3">
                         <el-option label="No Filter" value="No Filter"></el-option>
                         <el-option label="Grayscale" value="Grayscale"></el-option>
@@ -90,7 +96,8 @@
                     font: "Comic Sans",
                     color: "black",
                     id: -1
-                }
+                },
+                editText: ""
             };
         },
         beforeCreate: function () {
@@ -103,6 +110,14 @@
                 if (payload.selectedText) {
                     this.selectedText = payload.selectedText;
                 }
+            },
+
+            setEditText(data) {
+                this.editText = data;
+            },
+
+            handleEditText() {
+                this.$emit("editText", this.editText);
             },
 
             handleAddText() {
