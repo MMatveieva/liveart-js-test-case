@@ -28,10 +28,7 @@ viewModel.setData({
 viewModel.$on("exportSVG", function () {
     let xml = designerCanvas.canvas.toSVG();
     // console.log(xml);
-    viewModel.setData({
-        svg: xml
-    });
-});
+    viewModel.setSVG(xml);
 
 viewModel.$on("importSVG", function (svg) {
     designerCanvas.canvas.clear();

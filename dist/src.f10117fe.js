@@ -131284,6 +131284,9 @@ exports["default"] = {
     this.selectedText.id = this.id_gen + 1;
   },
   methods: {
+    setSVG: function setSVG(data) {
+      this.svg = data;
+    },
     setData: function setData(payload) {
       if (payload.selectedText) {
         this.selectedText = payload.selectedText;
@@ -131303,7 +131306,7 @@ exports["default"] = {
       this.$emit("toBackClick");
     },
     handleExport: function handleExport() {
-      this.$emit("exportSVG", this.svg);
+      this.$emit("exportSVG");
     },
     handleImport: function handleImport() {
       this.$emit("importSVG", this.svg);
@@ -131547,7 +131550,7 @@ exports["default"] = {
               _c(
                 "el-input",
                 {
-                  attrs: { type: "textarea", placeholder: "SVG" },
+                  attrs: { type: "textarea", rows: 5, placeholder: "SVG" },
                   model: {
                     value: _vm.svg,
                     callback: function($$v) {
@@ -131665,58 +131668,60 @@ viewModel.setData({
   }
 }); //listen data from UI
 
-viewModel.$on("exportSVG", function (svg) {
-  var xml = designerCanvas.canvas.toSVG(); // console.log(xml);
+viewModel.$on("exportSVG", function () {
+  var xml = designerCanvas.canvas.toSVG();
+  console.log(xml);
+  viewModel.setSVG(xml);
+  viewModel.$on("importSVG", function (svg) {
+    designerCanvas.canvas.clear();
+    fabric_1.fabric.loadSVGFromURL(svg, function (objects, options) {
+      var obj = fabric_1.fabric.util.groupSVGElements(objects, options);
+      designerCanvas.canvas.add(obj).renderAll();
+    });
+  });
+  viewModel.$on("toFrontClick", function () {
+    designerCanvas.canvas.bringToFront(designerCanvas.canvas.getActiveObject());
+  });
+  viewModel.$on("toBackClick", function () {
+    designerCanvas.canvas.sendToBack(designerCanvas.canvas.getActiveObject());
+  });
+  viewModel.$on("deleteClick", function () {
+    designerCanvas.canvas.remove(designerCanvas.canvas.getActiveObject());
+  });
+  viewModel.$on("addText", function (value) {
+    var top = Math.floor(Math.random() * 350) + 1;
+    var left = Math.floor(Math.random() * 300) + 1;
+    var text = new fabric_1.fabric.Text(value.text, {
+      fontFamily: value.font,
+      fill: value.color,
+      top: top,
+      left: left
+    });
+    designerCanvas.canvas.add(text);
+  });
+  viewModel.$on("importIMG", function (file) {
+    designerCanvas.addPhoto(file, {
+      left: 50,
+      top: 50
+    });
+  }); //#endregion
+  //#region work with canvas
 
-  viewModel.setData({
-    svg: xml
+  designerCanvas.addPhoto("https://live.staticflickr.com/5031/7430761556_c3e7b6c321_m.jpg", {
+    left: 10,
+    top: 10
   });
-});
-viewModel.$on("importSVG", function (svg) {
-  designerCanvas.canvas.clear();
-});
-viewModel.$on("toFrontClick", function () {
-  designerCanvas.canvas.bringToFront(designerCanvas.canvas.getActiveObject());
-});
-viewModel.$on("toBackClick", function () {
-  designerCanvas.canvas.sendToBack(designerCanvas.canvas.getActiveObject());
-});
-viewModel.$on("deleteClick", function () {
-  designerCanvas.canvas.remove(designerCanvas.canvas.getActiveObject());
-});
-viewModel.$on("addText", function (value) {
-  var top = Math.floor(Math.random() * 350) + 1;
-  var left = Math.floor(Math.random() * 300) + 1;
-  var text = new fabric_1.fabric.Text(value.text, {
-    fontFamily: value.font,
-    fill: value.color,
-    top: top,
-    left: left
+  designerCanvas.addPhoto("https://live.staticflickr.com/7039/6835581528_e747fd91fe_q.jpg", {
+    left: 210,
+    top: 90,
+    filter: "grayscale"
   });
-  designerCanvas.canvas.add(text);
-});
-viewModel.$on("importIMG", function (file) {
-  designerCanvas.addPhoto(file, {
-    left: 50,
-    top: 50
-  });
+  designerCanvas.canvas.add(new fabric_1.fabric.Text("I'm green text", {
+    fill: "#009900",
+    left: 10,
+    top: 300
+  })); //#endregion
 }); //#endregion
-//#region work with canvas
-
-designerCanvas.addPhoto("https://live.staticflickr.com/5031/7430761556_c3e7b6c321_m.jpg", {
-  left: 10,
-  top: 10
-});
-designerCanvas.addPhoto("https://live.staticflickr.com/7039/6835581528_e747fd91fe_q.jpg", {
-  left: 210,
-  top: 90,
-  filter: "grayscale"
-});
-designerCanvas.canvas.add(new fabric_1.fabric.Text("I'm green text", {
-  fill: "#009900",
-  left: 10,
-  top: 300
-})); //#endregion
 },{"vue":"node_modules/vue/dist/vue.runtime.esm.js","./designerCanvas":"src/designerCanvas.ts","fabric":"node_modules/fabric/dist/fabric.js","./App":"src/App.vue"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -131745,7 +131750,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51713" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53460" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

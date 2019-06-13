@@ -45,7 +45,7 @@
                 </el-row>
             </el-tab-pane>
             <el-tab-pane label="Import/Export" name="third">
-                <el-input type="textarea" placeholder="SVG" v-model="svg">{{svg}}</el-input>
+                <el-input type="textarea" :rows="5" placeholder="SVG" v-model="svg">{{svg}}</el-input>
                 <el-row class="mt-3">
                     <el-button size="medium" type="primary" @click="handleExport">Export SVG</el-button>
                     <el-button size="medium" @click="handleImport">Import SVG</el-button>
@@ -90,6 +90,10 @@
         },
 
         methods: {
+            setSVG(data) {
+                this.svg = data;
+            },
+
             setData(payload) {
                 if (payload.selectedText) {
                     this.selectedText = payload.selectedText;
