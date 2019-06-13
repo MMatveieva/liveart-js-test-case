@@ -35,11 +35,11 @@
                     ID:
                     <span>{{id_gen}}</span>
                 </label>
-                <div class="load-photo">
-                    <b-form-file v-model="file" class="mt-3" plain></b-form-file>
-                </div>
+                <!--<div class="load-photo">-->
+                <!--<b-form-file v-model="file" class="mt-3" plain></b-form-file>-->
+                <!--</div>-->
                 <el-row class="mt-3">
-                    <el-input placeholder="Image URL" clearable>
+                    <el-input placeholder="Image URL" v-model="imgURL" clearable>
                         <el-button slot="append" @click="handleImportIMG">Add</el-button>
                     </el-input>
                 </el-row>
@@ -76,6 +76,10 @@
                 unusedData: "stub",
                 svg: "",
                 file: "",
+                img: {
+                    imgURL: "",
+                    filter: ""
+                },
                 selectedText: {
                     text: "Default text",
                     font: "Comic Sans",
@@ -130,7 +134,8 @@
             },
 
             handleImportIMG() {
-                this.$emit("importIMG", this.file);
+                const {url, filter} = this.img;
+                this.$emit("importIMG", url, filter);
             }
         }
     });
