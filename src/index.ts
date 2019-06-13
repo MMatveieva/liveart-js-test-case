@@ -35,6 +35,11 @@ viewModel.$on("exportSVG", function () {
 
 viewModel.$on("importSVG", function (svg) {
     designerCanvas.canvas.clear();
+
+    fabric.loadSVGFromURL(svg, function (objects, options) {
+        let obj = fabric.util.groupSVGElements(objects, options);
+        designerCanvas.canvas.add(obj).renderAll();
+    });
 });
 
 viewModel.$on("toFrontClick", function () {
