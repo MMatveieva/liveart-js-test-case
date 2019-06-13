@@ -100,7 +100,7 @@
                 editText: ""
             };
         },
-        beforeCreate: function () {
+        onCreate: function () {
             this.id_photo = this.id_gen;
             this.selectedText.id = this.id_gen + 1;
         },
