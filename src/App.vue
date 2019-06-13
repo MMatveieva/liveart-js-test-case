@@ -42,6 +42,11 @@
                     <el-input placeholder="Image URL" v-model="imgURL" clearable>
                         <el-button slot="append" @click="handleImportIMG">Add</el-button>
                     </el-input>
+                    <el-select v-model="filter" placeholder="Select Filter" class="mr-3">
+                        <el-option label="No Filter" value="No Filter"></el-option>
+                        <el-option label="Grayscale" value="Grayscale"></el-option>
+                        <el-option label="Pixelate 8" value="Pixelate"></el-option>
+                    </el-select>
                 </el-row>
             </el-tab-pane>
             <el-tab-pane label="Import/Export" name="third">
@@ -76,10 +81,10 @@
                 unusedData: "stub",
                 svg: "",
                 file: "",
-                img: {
-                    imgURL: "",
-                    filter: ""
-                },
+
+                imgURL: "",
+                filter: "No Filter",
+
                 selectedText: {
                     text: "Default text",
                     font: "Comic Sans",
@@ -94,10 +99,6 @@
         },
 
         methods: {
-            setSVG(data) {
-                this.svg = data;
-            },
-
             setData(payload) {
                 if (payload.selectedText) {
                     this.selectedText = payload.selectedText;
@@ -134,8 +135,13 @@
             },
 
             handleImportIMG() {
-                const {url, filter} = this.img;
-                this.$emit("importIMG", url, filter);
+                const url = this.imgURL;
+                const fil = this.filter;
+                this.$emit("importIMG", url, fil);
+            },
+
+            setSVG(data) {
+                this.svg = data;
             }
         }
     });
